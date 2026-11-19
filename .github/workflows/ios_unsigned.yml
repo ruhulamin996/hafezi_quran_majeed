@@ -2,6 +2,8 @@ name: Build Unsigned iOS IPA
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
   build:
@@ -15,10 +17,14 @@ jobs:
 
       - run: flutter pub get
 
-      - name: Install CocoaPods
+      - name: Install CocoaPods (if Podfile exists)
         run: |
-          cd ios
-          pod install --repo-update
+          if [ -f "ios/Podfile" ]; then
+            cd ios
+            pod install --repo-update
+          else
+            echo "No Podfile found, skipping pod install."
+          fi
 
       - name: Build Unsigned Release iOS
         run: flutter build ios --release --no-codesign
