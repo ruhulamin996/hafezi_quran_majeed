@@ -3,6 +3,7 @@ import 'package:hafezi_quran_majeed/style/app_theme.dart';
 import 'package:hafezi_quran_majeed/utils/bookmark_manager.dart';
 import 'package:hafezi_quran_majeed/utils/number_converter.dart';
 import 'package:hafezi_quran_majeed/utils/quran_page_info.dart';
+import 'package:marquee/marquee.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -76,7 +77,40 @@ class _ReadingScreenState extends State<ReadingScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 0),
+      appBar: AppBar(
+        toolbarHeight: 40,
+        leadingWidth: 36,
+        titleSpacing: 4,
+        leading: Padding(
+          padding: const EdgeInsets.all(1.0),
+          child: CircleAvatar(
+            backgroundColor: AppColors.blackColor.withOpacity(0.2),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              icon: const Icon(Icons.arrow_back, color: AppColors.whiteColor,),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ),
+        ),
+        title: SizedBox(
+          height: 24,
+          child: Marquee(
+            text: 'এই পৃষ্টা সেভ করে রাখতে চাইলে, পৃষ্টার উপর একসাথ দুইবার ট্যাপ করুন। তখন এই পৃষ্টা বুকমার্ক লিষ্টে যুক্ত হয়ে যাবে।',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            scrollAxis: Axis.horizontal,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            blankSpace: 40.0,
+            velocity: 30.0,
+            pauseAfterRound: const Duration(seconds: 1),
+            startPadding: 10.0,
+            accelerationDuration: const Duration(seconds: 1),
+            accelerationCurve: Curves.linear,
+            decelerationDuration: const Duration(milliseconds: 500),
+            decelerationCurve: Curves.easeOut,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: PageView.builder(
           controller: _pageController,
@@ -129,11 +163,17 @@ class _ReadingScreenState extends State<ReadingScreen> {
                     color: AppTheme.lightTheme.scaffoldBackgroundColor,
                     child: GestureDetector(
                       onDoubleTap: () async {
-                        final isSaved = await BookmarkManager.toggleBookmark(index,);
+                        final isSaved = await BookmarkManager.toggleBookmark(
+                          index,
+                        );
                         if (!context.mounted) return;
                         final info = QuranPageInfo.fromPageIndex(index);
-                        final banglaPara = convertToBengaliDigits(info.paraNumber.toString(),);
-                        final banglaPageInPara = convertToBengaliDigits(info.pageInPara.toString(),);
+                        final banglaPara = convertToBengaliDigits(
+                          info.paraNumber.toString(),
+                        );
+                        final banglaPageInPara = convertToBengaliDigits(
+                          info.pageInPara.toString(),
+                        );
 
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
