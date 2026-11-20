@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:hafezi_quran_majeed/pages/bookmark_screen.dart';
 import 'package:hafezi_quran_majeed/pages/home_screen.dart';
 import 'package:hafezi_quran_majeed/pages/para_screen.dart';
@@ -9,6 +10,10 @@ import 'package:material_ui/material_ui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(const MyApp());
 }
 
